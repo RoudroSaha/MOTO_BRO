@@ -206,9 +206,9 @@
         </div>
     </div>
 </div>
-<!-- Featured car end -->
+
  <div class ="car-form-container">
-    <h2>Add / Update Cars</h2>
+    <h2>Add</h2>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% if form.errors %}
@@ -217,7 +217,7 @@
             </div>
         {% endif %}
         {{ form.as_p }}
-        <input type="submit" name="submit" value="Save Car" class="btn-submit">
+        <input type="submit" name="submit" value="Add car" class="btn-submit">
     </form>
  </div>
 

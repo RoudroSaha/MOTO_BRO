@@ -2,7 +2,6 @@ from django.db import models
 from datetime import datetime
 from multiselectfield import MultiSelectField
 
-# Create your models here.
 class Car(models.Model):
     state_choice = (
         ('AL', 'Alabama'),
