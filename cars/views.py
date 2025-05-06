@@ -1,7 +1,9 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Car
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import HttpResponse
+from .forms import CarForm
+from django.contrib import messages
 
 # Create your views here.
 def cars(request):
@@ -10,23 +12,34 @@ def cars(request):
     page = request.GET.get('page')
     paged_cars = paginator.get_page(page)
     
+    if request.method == 'POST':
+        form = CarForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Car added successfully!')
+            return redirect('cars')
+    else:
+        form = CarForm()
+    
     context = {
         'cars': paged_cars,
+        'form': form,
+        'model_search': Car.objects.values_list('model', flat=True).distinct(),
+        'city_search': Car.objects.values_list('city', flat=True).distinct(),
+        'year_search': Car.objects.values_list('year', flat=True).distinct(),
+        'body_style_search': Car.objects.values_list('body_style', flat=True).distinct(),
     }
     return render(request, 'cars/cars.html', context)
 
 def car_detail(request, id):
     single_car = get_object_or_404(Car, pk=id)
-
     data = {
         'single_car': single_car,
     }
     return render(request, 'cars/car_detail.html', data)
 
-
 def search(request):
     cars = Car.objects.order_by('-created_date')
-
     model_search = Car.objects.values_list('model', flat=True).distinct()
     city_search = Car.objects.values_list('city', flat=True).distinct()
     year_search = Car.objects.values_list('year', flat=True).distinct()
@@ -73,8 +86,6 @@ def search(request):
         'transmission_search': transmission_search,
     }
     return render(request, 'cars/search.html', data)
-
-
 
 def inquiry(request):
     if request.method == "POST":

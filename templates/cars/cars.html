@@ -207,5 +207,18 @@
     </div>
 </div>
 <!-- Featured car end -->
+ <div class ="car-form-container">
+    <h2>Add / Update Cars</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                Please correct the errors below.
+            </div>
+        {% endif %}
+        {{ form.as_p }}
+        <input type="submit" name="submit" value="Save Car" class="btn-submit">
+    </form>
+ </div>
 
 {% endblock %}
