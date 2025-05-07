@@ -3262,6 +3262,27 @@ input[type=checkbox]:checked + label:before {
     box-shadow: 0 0 35px rgba(0, 0, 0, 0.1);
 }
 
+.team-member-photo {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.team-1:hover {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.team-1 .photo {
+    position: relative;
+    overflow: hidden;
+}
+
+.team-1 .details {
+    padding: 20px;
+    text-align: center;
+}
+
 .team-1:hover{
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
