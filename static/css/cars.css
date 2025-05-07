@@ -32,3 +32,44 @@
 .car-form-container input[type="submit"]:hover {
     background: #c41e1f;
 }
+
+.admin-car-list {
+    margin: 30px auto;
+    max-width: 800px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.admin-car-list h3 {
+    color: #333;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #db2d2e;
+}
+
+.admin-car-list .table {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.admin-car-list .btn {
+    margin: 0 5px;
+}
+
+.admin-car-list .btn-primary {
+    background: #db2d2e;
+    border-color: #db2d2e;
+}
+
+.admin-car-list .btn-danger {
+    background: #dc3545;
+    border-color: #dc3545;
+}
+
+.button-group {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+}

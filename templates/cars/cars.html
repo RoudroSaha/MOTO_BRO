@@ -207,18 +207,89 @@
     </div>
 </div>
 
- <div class ="car-form-container">
-    <h2>Add</h2>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {% if form.errors %}
-            <div class="alert alert-danger">
-                Please correct the errors below.
+<!-- Add this admin-only car management section -->
+{% if user.is_authenticated and user.is_staff %}
+    <div class="car-form-container">
+        <h2>Car Management (Admin Only)</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    Please correct the errors below.
+                </div>
+            {% endif %}
+            {{ form.as_p }}
+            <div class="button-group">
+                <input type="submit" name="submit" value="Add Car" class="btn-submit">
             </div>
-        {% endif %}
-        {{ form.as_p }}
-        <input type="submit" name="submit" value="Add car" class="btn-submit">
-    </form>
- </div>
+        </form>
+    </div>
 
+    <!-- Car Management Table -->
+    <div class="admin-car-list">
+        <h3>Manage Cars</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Car Title</th>
+                    <th>Model</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for car in cars %}
+                <tr>
+                    <td>{{ car.car_title }}</td>
+                    <td>{{ car.model }}</td>
+                    <td>${{ car.price }}</td>
+                    <td>
+                        <a href="{% url 'update_car' car.id %}" class="btn btn-primary btn-sm">Edit</a>
+                        <a href="{% url 'delete_car' car.id %}" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+
+    <!-- Page navigation start -->
+    <div class="pagination-box p-box-2 text-center">
+        <nav aria-label="Page navigation example">
+          {% if cars.has_other_pages %}
+            <ul class="pagination">
+              {% if cars.has_previous %}
+                  <li class="page-item">
+                      <a class="page-link" href="?page={{cars.previous_page_number}}"><i class="fa fa-angle-left"></i></a>
+                  </li>
+              {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link"><i class="fa fa-angle-left"></i></a>
+                </li>
+              {% endif %}
+
+              {% for i in cars.paginator.page_range %}
+                {% if cars.number == i %}
+                  <li class="page-item"><a class="page-link active" href="#">{{i}}</a></li>
+                {% else %}
+                  <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                {% endif %}
+              {% endfor %}
+
+              {% if cars.has_next %}
+                  <li class="page-item">
+                      <a class="page-link" href="?page={{cars.next_page_number}}"><i class="fa fa-angle-right"></i></a>
+                  </li>
+              {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link"><i class="fa fa-angle-right"></i></a>
+                </li>
+              {% endif %}
+
+            </ul>
+          {% endif %}
+        </nav>
+    </div>
+</div>
 {% endblock %}
