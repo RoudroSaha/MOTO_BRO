@@ -1,32 +1,33 @@
 from django import forms
-
 from .models import Car
 
-class CarForm(forms.ModelForm): 
+class CarForm(forms.ModelForm):
+    is_featured = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={
+        'class': 'form-check-input',
+        'style': 'margin-right: 10px;'
+    }))
+
     class Meta:
         model = Car
-        fields = "__all__"
-        widgets = {
-            'description': forms.Textarea(attrs={'rows': 4, 'cols': 40}),
-            'car_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter car title'}),
-            'state': forms.Select(attrs={'class': 'form-control'}),
-            'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter city'}),
-            'color': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter color'}),
-            'model': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter model'}),
-            'year': forms.Select(attrs={'class': 'form-control'}),
-            'condition': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter condition'}),
-            'price': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter price'}),
-            'features': forms.Select(attrs={'class': 'form-control'}),
-            'body_style': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter body style'}),
-            'engine': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter engine details'}),
-            'transmission': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter transmission'}),
-            'interior': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter interior details'}),
-            'miles': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter miles'}),
-            'doors': forms.Select(attrs={'class': 'form-control'}),
-            'passengers': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter passenger capacity'}),
-            'vin_no': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter VIN number'}),
-            'milage': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter mileage'}),
-            'fuel_type': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter fuel type'}),
-            'no_of_owners': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter number of owners'}),
-            'is_featured': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-        }
+        fields = [
+            'car_title', 'state', 'city', 'color', 'model', 
+            'year', 'condition', 'price', 'description', 
+            'car_photo', 'car_photo_1', 'car_photo_2', 
+            'car_photo_3', 'car_photo_4', 'features', 
+            'body_style', 'engine', 'transmission', 
+            'interior', 'miles', 'doors', 'passengers',
+            'vin_no', 'milage', 'fuel_type', 'no_of_owners',
+            'is_featured'
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add Bootstrap classes to all form fields
+        for field in self.fields:
+            if field not in ['features', 'is_featured']:
+                self.fields[field].widget.attrs['class'] = 'form-control'
+            elif field == 'features':
+                self.fields[field].widget.attrs.update({
+                    'class': 'form-check-input',
+                    'style': 'margin-right: 10px;'
+                })

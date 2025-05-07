@@ -3,6 +3,8 @@ from .models import Car
 from .forms import CarForm
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import HttpResponse
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required, user_passes_test
 
 def cars(request):
     cars = Car.objects.order_by('-created_date')
@@ -88,3 +90,22 @@ def delete_car(request, id):
         car.delete()
         return redirect('cars')
     return render(request, 'cars/delete_car.html', {'car': car})
+
+
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def add_car(request):
+    if request.method == 'POST':
+        form = CarForm(request.POST, request.FILES)
+        if form.is_valid():
+            car = form.save(commit=False)
+            car.save()
+            messages.success(request, 'Car added successfully!')
+            return redirect('cars')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = CarForm()
+    return render(request, 'cars/add_car.html', {'form': form})
+

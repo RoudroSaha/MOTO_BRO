@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
-from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import redirect
+from django.contrib import messages
+from .forms import CustomUserCreationForm  # Import the new form
+from cars.forms import CarForm
 
 def login_view(request):
     if request.method == "POST":
@@ -19,13 +21,19 @@ def login_view(request):
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('login')  # Redirect to login after registration
+            user = form.save()
+            login(request, user)
+            messages.success(request, 'Registration successful! Welcome to MOTO BRO!')
+            return redirect('home')
+        else:
+            messages.error(request, 'Please correct the errors below.')
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
 
     return render(request, 'accounts/register.html', {'form': form})
+
 def dashboard_view(request):
     return render(request, 'accounts/dashboard.html')
+
